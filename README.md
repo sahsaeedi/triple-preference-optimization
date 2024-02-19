@@ -1,1 +1,1 @@
-# triple_preferences_optimization
+# Triple Preferences Optimization (TPO)
