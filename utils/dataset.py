@@ -10,7 +10,6 @@ def create_dataset(sample):
     socres = [sample['completions'][i]['overall_score'] for i in range(len(sample['models']))]
     ref_index = np.array(socres).argmax()
     chosen_index = np.argsort(socres, axis=0)[-2]
-    # rejected_index = np.argsort(socres, axis=0)[-3]
     rejected_index = np.array(socres).argmin()
     data = {
         'prompt': sample['instruction'],
@@ -41,9 +40,8 @@ df['prompt'] = dataset['prompt']
 df['reference'] = dataset['reference']
 df['chosen'] = dataset['chosen']
 df['rejected'] = dataset['rejected']
-# print(df.isnull().sum().sum())
-
 df = df.dropna()
+
 df = df.sample(n=12000)
 data = {
         'prompt': list(df['prompt'].values),
