@@ -74,7 +74,7 @@ def main():
     
     raw_datasets = raw_datasets.train_test_split(test_size=0.10)
 
-    # Replace column names with what TRL needs, text_chosen -> chosen and text_rejected -> rejected
+    # Replace column names with what TRL needs, text_chosen -> chosen, text_rejected -> rejected, and text_reference -> reference
     for split in ["train", "test"]:
         raw_datasets[split] = raw_datasets[split].rename_columns(
             {"text_prompt": "prompt", "text_chosen": "chosen", "text_rejected": "rejected", "text_reference": "reference"}
@@ -83,20 +83,12 @@ def main():
     # Log a few random samples from the training set:
     for index in random.sample(range(len(raw_datasets["train"])), 3):
         logger.info(f"Prompt sample {index} of the raw training set:\n\n{raw_datasets['train'][index]['prompt']}")
+        logger.info(f"Prompt sample {index} of the raw training set:\n\n{raw_datasets['train'][index]['reference']}")
         logger.info(f"Chosen sample {index} of the raw training set:\n\n{raw_datasets['train'][index]['chosen']}")
         logger.info(f"Rejected sample {index} of the raw training set:\n\n{raw_datasets['train'][index]['rejected']}")
 
 
     model = load_model(data_args, model_args, training_args, tokenizer, logger)
-
-
-    # output_dir = '/data/data/amir/tpo/tpo_zephyr_01_1_mistral'
-    # output_dir = "/data/data/amir/dpo/gpt_test"
-    # if not os.path.exists(output_dir):
-    #     os.makedirs(output_dir)
-
-    model.config.use_cache = False
-
 
     tpo_trainer = TPOTrainer(
         model,
@@ -125,14 +117,6 @@ def main():
                 model.save_pretrained(training_args.output_dir) 
         else:
             tpo_trainer.save_model()  # Saves the tokenizer too for easy upload
-
-    # # 6. train
-    # tpo_trainer.train()
-    # tpo_trainer.save_model(output_dir)
-
-    # # 7. save
-    # output_dir = os.path.join(output_dir, "final_checkpoint")
-    # tpo_trainer.model.save_pretrained(output_dir)
 
 
 

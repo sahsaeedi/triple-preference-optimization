@@ -17,7 +17,7 @@ from typing import List, Literal, Optional
 
 from datasets import Dataset, concatenate_datasets, load_dataset, load_from_disk
 from datasets.builder import DatasetGenerationError
-
+import json
 from .configs import DataArguments
 
 
@@ -74,7 +74,7 @@ def apply_chat_template(
 
 def get_datasets() -> Dataset:
 
-    with open("/home/ssaeidi1/triple_preferences_optimization/data/UltraFeedback_triple_preferences.json") as infile:
+    with open("/home/ssaeidi1/triple_preferences_optimization-1/data/UltraFeedback_triple_preferences.json") as infile:
         dataset = json.load(infile)
     dataset = Dataset.from_dict(dataset)
     # print(dataset)

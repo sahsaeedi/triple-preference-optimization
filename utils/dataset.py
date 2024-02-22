@@ -44,6 +44,7 @@ df['rejected'] = dataset['rejected']
 # print(df.isnull().sum().sum())
 
 df = df.dropna()
+df = df.sample(n=12000)
 data = {
         'prompt': list(df['prompt'].values),
         'reference': list(df['reference'].values),
@@ -51,8 +52,7 @@ data = {
         'rejected': list(df['rejected'].values),
         }
 
-# print(df.isnull().sum().sum())
-# print(data['prompt'][0])
-with open("/home/ssaeidi1/triple_preferences_optimization/scripts/UltraFeedback_triple_preferences.json", "w") as outfile: 
+
+with open("/home/ssaeidi1/triple_preferences_optimization-1/data/UltraFeedback_triple_preferences.json", "w") as outfile: 
     json.dump(data, outfile)
 

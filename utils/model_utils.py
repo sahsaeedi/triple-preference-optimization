@@ -227,5 +227,5 @@ def load_model(data_args, model_args, training_args, tokenizer, logger):
     #         if "norm" in name:
     #             param.requires_grad = False
     model = AutoModelForCausalLM.from_pretrained(model_args.model_name_or_path, torch_dtype=torch.float32, device_map="auto")
-        
+    model.config.use_cache = False
     return model
