@@ -25,9 +25,7 @@ def main():
     parser = HfArgumentParser((ModelArguments, DataArguments, TPOConfig))
     model_args, data_args, training_args = parser.parse_args_into_dataclasses()
 
-    #######
     # Setup
-    #######
     logging.basicConfig(
         format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
@@ -50,18 +48,12 @@ def main():
 
     # Load dataset
     raw_datasets = get_datasets()
-    # logger.info(
-    #     f"Training on the following splits: {[split + ' : ' + str(dset.num_rows) for split, dset in raw_datasets.items()]}"
-    # )
     column_names = list(raw_datasets.features)
 
 
     # Load tokenizer
     data_args.truncation_side = "left"  # Truncate from left to ensure we don't lose labels in final turn
     tokenizer = get_tokenizer(model_args, data_args)
-
-    # path =  "alignment-handbook/zephyr-7b-sft-full"
-    # path =  "mistralai/Mistral-7B-v0.1"
 
     # Apply chat template
     raw_datasets = raw_datasets.map(
