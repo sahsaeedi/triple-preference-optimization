@@ -15,7 +15,7 @@
 import os
 from typing import List, Literal, Optional
 
-from datasets import DatasetDict, concatenate_datasets, load_dataset, load_from_disk
+from datasets import Dataset, concatenate_datasets, load_dataset, load_from_disk
 from datasets.builder import DatasetGenerationError
 
 from .configs import DataArguments
@@ -69,4 +69,15 @@ def apply_chat_template(
             f"Task {task} not supported, please ensure that the provided task is one of {['sft', 'generation', 'tpo']}"
         )
     return example
+
+
+
+def get_datasets() -> Dataset:
+
+    with open("/home/ssaeidi1/triple_preferences_optimization/data/UltraFeedback_triple_preferences.json") as infile:
+        dataset = json.load(infile)
+    dataset = Dataset.from_dict(dataset)
+    # print(dataset)
+    return dataset
+
 

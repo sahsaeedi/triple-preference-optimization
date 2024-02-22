@@ -6,39 +6,68 @@ from typing import Optional
 import torch
 import json
 import numpy as np
+import sys
+import random
 from datasets import load_dataset, load_metric, Dataset, DatasetDict
 import os
+import transformers
 from utils.tpo_trainer import TPOTrainer
-from transformers import AutoModelForCausalLM, AutoTokenizer, HfArgumentParser, TrainingArguments
+from transformers import AutoModelForCausalLM, AutoTokenizer, HfArgumentParser, TrainingArguments, set_seed
 from datasets import load_from_disk
+from utils.configs import DataArguments, ModelArguments, TPOConfig
+from utils.model_utils import load_model, get_tokenizer
+from utils.data import load_dataset, apply_chat_template, get_datasets
 
+logger = logging.getLogger(__name__)
 
 def main():
 
-    raw_datasets = load_from_disk('/data/data/amir/tpo_dataset/tpo_dataset_2.hf')[:12000]
-    raw_datasets = Dataset.from_dict(raw_datasets)
+    parser = HfArgumentParser((ModelArguments, DataArguments, TPOConfig))
+    model_args, data_args, training_args = parser.parse_args_into_dataclasses()
+
+    #######
+    # Setup
+    #######
+    logging.basicConfig(
+        format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+        handlers=[logging.StreamHandler(sys.stdout)],
+    )
+    log_level = training_args.get_process_log_level()
+    logger.setLevel(log_level)
+    transformers.utils.logging.set_verbosity(log_level)
+    transformers.utils.logging.enable_default_handler()
+    transformers.utils.logging.enable_explicit_format()
+
+    # Log on each process the small summary:
+    logger.info(f"Model parameters {model_args}")
+    logger.info(f"Data parameters {data_args}")
+    logger.info(f"Training/evaluation parameters {training_args}")
+
+    # Set seed for reproducibility
+    set_seed(training_args.seed)
+
+
+    # Load dataset
+    raw_datasets = get_datasets()
+    # logger.info(
+    #     f"Training on the following splits: {[split + ' : ' + str(dset.num_rows) for split, dset in raw_datasets.items()]}"
+    # )
     column_names = list(raw_datasets.features)
 
+
+    # Load tokenizer
+    data_args.truncation_side = "left"  # Truncate from left to ensure we don't lose labels in final turn
+    tokenizer = get_tokenizer(model_args, data_args)
+
     # path =  "alignment-handbook/zephyr-7b-sft-full"
-    path =  "mistralai/Mistral-7B-v0.1"
+    # path =  "mistralai/Mistral-7B-v0.1"
 
-    model = AutoModelForCausalLM.from_pretrained(path, torch_dtype=torch.float32, device_map="auto")
-    # model_ref = AutoModelForCausalLM.from_pretrained(path, **model_kwargs)
-    # model_ref = AutoModelForCausalLM.from_pretrained(path, torch_dtype=torch.float32, device_map="auto")
-    # model_ref = model
-    tokenizer = AutoTokenizer.from_pretrained(path, device_map="auto")
-    tokenizer.model_max_length = 2048
-    tokenizer.pad_token = tokenizer.eos_token
-    tokenizer.chat_template = DEFAULT_CHAT_TEMPLATE
-    tokenizer.truncation_side = 'left'
-
-    #####################
     # Apply chat template
-    #####################
     raw_datasets = raw_datasets.map(
         apply_chat_template,
         fn_kwargs={"tokenizer": tokenizer, "task": "tpo"},
-        num_proc=4,
+        num_proc=data_args.preprocessing_num_workers,
         remove_columns=column_names,
         desc="Formatting comparisons with prompt template",
     )
@@ -51,61 +80,59 @@ def main():
             {"text_prompt": "prompt", "text_chosen": "chosen", "text_rejected": "rejected", "text_reference": "reference"}
         )
 
+    # Log a few random samples from the training set:
+    for index in random.sample(range(len(raw_datasets["train"])), 3):
+        logger.info(f"Prompt sample {index} of the raw training set:\n\n{raw_datasets['train'][index]['prompt']}")
+        logger.info(f"Chosen sample {index} of the raw training set:\n\n{raw_datasets['train'][index]['chosen']}")
+        logger.info(f"Rejected sample {index} of the raw training set:\n\n{raw_datasets['train'][index]['rejected']}")
 
-    output_dir = '/data/data/amir/tpo/tpo_zephyr_01_1_mistral'
+
+    model = load_model(data_args, model_args, training_args, tokenizer, logger)
+
+
+    # output_dir = '/data/data/amir/tpo/tpo_zephyr_01_1_mistral'
     # output_dir = "/data/data/amir/dpo/gpt_test"
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
+    # if not os.path.exists(output_dir):
+    #     os.makedirs(output_dir)
 
     model.config.use_cache = False
 
-    # 4. initialize training arguments:
-    training_args = TrainingArguments(
-        per_device_train_batch_size=4,
-        per_device_eval_batch_size=4,
-        # max_steps=1000,
-        logging_steps=10,
-        save_steps=100,
-        gradient_accumulation_steps=2,
-        gradient_checkpointing=True,
-        learning_rate=5.0e-7,
-        evaluation_strategy="steps",
-        eval_steps=100,
-        output_dir=output_dir,
-        lr_scheduler_type="cosine",
-        # warmup_steps=100,
-        optim="adamw_torch",
-        # optim="paged_adamw_32bit",
-        # remove_unused_columns=False,
-        run_name="tpo_zephyr_0.1_1_mistral",
-        report_to = "wandb",
-        bf16=True,
-        log_level = 'info',
-        num_train_epochs = 1,
-        save_total_limit = 1,
-        seed = 42,
-        warmup_ratio = 0.1, 
-    )
 
     tpo_trainer = TPOTrainer(
         model,
         args=training_args,
-        beta=0.1,
-        alpha=0.5,
+        beta=training_args.beta,
+        alpha=training_args.alpha,
         train_dataset=raw_datasets['train'],
         eval_dataset=raw_datasets['test'],
         tokenizer=tokenizer,
-        max_prompt_length=512,
-        max_length=1024,
+        max_prompt_length=training_args.max_length,
+        max_length=training_args.max_prompt_length,
+        callbacks=[SavePeftModelCallback] if model_args.use_peft else None,
     )
 
-    # 6. train
-    tpo_trainer.train()
-    tpo_trainer.save_model(output_dir)
+    # Training
+    if training_args.do_train:
+        checkpoint = None
+        if training_args.resume_from_checkpoint is not None:
+            checkpoint = training_args.resume_from_checkpoint
+        
+        tpo_trainer.train(resume_from_checkpoint=checkpoint)
 
-    # 7. save
-    output_dir = os.path.join(output_dir, "final_checkpoint")
-    tpo_trainer.model.save_pretrained(output_dir)
+        tpo_trainer.save_state()
+        if model_args.use_peft:
+            if torch.distributed.get_rank() == 0:
+                model.save_pretrained(training_args.output_dir) 
+        else:
+            tpo_trainer.save_model()  # Saves the tokenizer too for easy upload
+
+    # # 6. train
+    # tpo_trainer.train()
+    # tpo_trainer.save_model(output_dir)
+
+    # # 7. save
+    # output_dir = os.path.join(output_dir, "final_checkpoint")
+    # tpo_trainer.model.save_pretrained(output_dir)
 
 
 
