@@ -1,26 +1,26 @@
 # Triple Preferences Optimization (TPO): A Simple One-Step Combination of SFT and Preference Optimization with a Better Performance
 
-## Environment Setup
-This is a quick tutorial to setup the TPO method on your PC.
-1. create a conda environment:
+## Environment Setup and TPO
+This is a quick tutorial to set up and train a model with the TPO method.
+1. Create a conda environment:
 ```
-conda create --prefix [path]/tpo python=3.9 
+conda create --prefix tpo python=3.9 
 conda activate tpo
 ```
-2. if you are using **Nvidia GPUs** install torch 1.13.1 with cuda 11.7
+2. If you are using **Nvidia GPUs** install torch 1.13.1 with cuda 11.7
 ```
 pip install torch==1.13.1+cu117 torchvision==0.14.1+cu117 torchaudio==0.13.1 --extra-index-url https://download.pytorch.org/whl/cu117
 ```
-3. install the requirments
+3. Install the requirements:
 ```
 pip install -r requirements.txt
 ```
-4. prepare a suitable dataset. In `./utils/dataset.py` there is `n`. You can change the size of dataset with changing this parameter.
-(We attached a sample dataset in `data` folder that we used for training. However you can change the size.)
+4. Prepare a suitable dataset. In `./utils/dataset.py`, there is a parameter called `n.` You can change the size of the dataset by changing this parameter.
+(We attached a sample dataset in the `data` folder we used for training. However, you can change the size.)
 ```
 python dataset.py
 ```
-5. run the run_tpo.sh to train a model with TPO. We just used `alignment-handbook/zephyr-7b-sft-full` and `mistralai/Mistral-7B-v0.1`.
+5. Run the run_tpo.sh to train a model with TPO. This study used `alignment-handbook/zephyr-7b-sft-full` and `mistralai/Mistral-7B-v0.1` models. However, you can use other models to train with TPO.
 ```
 #!/bin/bash
 
