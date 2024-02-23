@@ -3,7 +3,7 @@
 export CUDA_VISIBLE_DEVICES=0,1,2,3,4,5
 
 export TRANSFORMERS_CACHE= .cache/mistral-7b
-OUTPUT_DIR=${1:-"/data/data/amir/test/1"}
+OUTPUT_DIR=${1:-"/TO/SAVE/THR/MODEL"}
 
 python ./run_tpo.py \
     --model_name_or_path mistralai/Mistral-7B-v0.1 \
