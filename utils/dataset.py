@@ -51,6 +51,6 @@ data = {
         }
 
 
-with open("/home/ssaeidi1/triple_preferences_optimization-1/data/UltraFeedback_triple_preferences.json", "w") as outfile: 
+with open("/TO/SAVE/DATASET/UltraFeedback_triple_preferences.json", "w") as outfile: 
     json.dump(data, outfile)
 

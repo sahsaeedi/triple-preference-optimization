@@ -2,7 +2,7 @@
 
 export CUDA_VISIBLE_DEVICES=0,1,2,3,4,5
 
-export TRANSFORMERS_CACHE=/data/data/amir/.cache/mistral-7b
+export TRANSFORMERS_CACHE= .cache/mistral-7b
 OUTPUT_DIR=${1:-"/data/data/amir/test/1"}
 
 python ./run_tpo.py \
