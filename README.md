@@ -1,6 +1,6 @@
 # Triple Preferences Optimization (TPO): A Simple One-Step Combination of SFT and Preference Optimization with a Better Performance
 
-## Environment Setup and TPO
+## Environment and TPO Setup
 This is a quick tutorial to set up and train a model with the TPO method.
 1. Create a conda environment:
 ```
