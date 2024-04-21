@@ -8,8 +8,8 @@ OUTPUT_DIR="/"
 accelerate launch \
  --config_file configs/deepspeed_train_config_bf16.yaml \
   run_tpo.py  \
-    --model_name_or_path microsoft/phi-2   \
-    --tokenizer_name microsoft/phi-2   \
+    --model_name_or_path mistralai/Mistral-7B-v0.1   \
+    --tokenizer_name mistralai/Mistral-7B-v0.1   \
     --beta 0.1  \
     --alpha 0.5  \
     --do_train  \
@@ -21,7 +21,7 @@ accelerate launch \
     --lr_scheduler_type cosine  \
     --optim adamw_torch  \
     --warmup_ratio 0.1   \
-    --save_steps 10  \
+    --save_steps 100  \
     --log_level info   \
     --per_device_train_batch_size 1 \
     --per_device_eval_batch_size 1  \

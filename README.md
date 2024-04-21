@@ -1,6 +1,26 @@
-# Triple Preferences Optimization (TPO): A Simple One-Step Combination of SFT and Preference Optimization with a Better Performance
+<p align="center">
+    <img alt="TPO" src="tpo_drawio.png" width="1000" height="">
+</p>
 
-## Environment and TPO Setup
+<div align="center">
+    
+# TPO: Triple Preference Optimization
+</div>
+
+<p align="center">
+<a href="LICENSE" alt="MIT License"><img src="https://img.shields.io/badge/license-MIT-FAD689.svg" /></a>
+
+<!-- <a href="https://cogintlab-asu.github.io/" alt="asu">ASU</a> -->
+<!-- <a href="https://www.microsoft.com/en-us/research/" alt="MSlogo"><img src="https://img.shields.io/badge/Microsoft-B1B479?logo=microsoft" /></a>
+<a href="https://twitter.com/fe1ixxu">
+  <img src="https://img.shields.io/twitter/follow/haoranxu?style=social&logo=twitter"
+      alt="follow on Twitter"></a>
+</p> -->
+
+
+ Triple Preferences Optimization (TPO) is a new preference learning method designed to align an LLM with three preferences without requiring a separate supervised fine-tuning step. The simple one-step combination of SFT and Preference Optimization outperforms current state-of-the-art alignment methods such as DPO, CPO, KTO and IPO.
+
+## Environment and TPO Setup 🔧
 This is a quick tutorial to set up and train a model with the TPO method.
 1. Create a conda environment:
 ```
@@ -24,37 +44,38 @@ python dataset.py
 ```
 #!/bin/bash
 
-export CUDA_VISIBLE_DEVICES=0,1,2,3,4,5
+OUTPUT_DIR="/OUTPUT/DIR/PATH"
 
-export TRANSFORMERS_CACHE= .cache/mistral-7b
-OUTPUT_DIR=${1:-"/TO/SAVE/THR/MODEL"}
-
-python ./run_tpo.py \
-    --model_name_or_path mistralai/Mistral-7B-v0.1 \
-    --tokenizer_name mistralai/Mistral-7B-v0.1 \
-    --beta 0.1 \
-    --alpha 0.5 \
-    --do_train \
-    --bf16 \
-    --multi_gpu_one_model True \
+accelerate launch \
+ --config_file configs/deepspeed_train_config_bf16.yaml \
+  run_tpo.py  \
+    --model_name_or_path mistralai/Mistral-7B-v0.1   \
+    --tokenizer_name mistralai/Mistral-7B-v0.1   \
+    --beta 0.1  \
+    --alpha 0.5  \
+    --do_train  \
+    --bf16   \
+    --attn_implementation flash_attention_2 \
+    --multi_gpu_one_model True  \
     --learning_rate 5.0e-7 \
-    --gradient_accumulation_steps 2 \
-    --lr_scheduler_type cosine \
-    --optim adamw_torch \
-    --warmup_ratio 0.1 \
-    --save_steps 100 \
-    --log_level info \
-    --per_device_train_batch_size 4 \
-    --per_device_eval_batch_size 4 \
-    --evaluation_strategy steps \
-    --save_total_limit 1 \
+    --gradient_accumulation_steps 2  \
+    --lr_scheduler_type cosine  \
+    --optim adamw_torch  \
+    --warmup_ratio 0.1   \
+    --save_steps 100  \
+    --log_level info   \
+    --per_device_train_batch_size 1 \
+    --per_device_eval_batch_size 1  \
+    --evaluation_strategy steps   \
+    --save_total_limit 1  \
     --logging_strategy steps \
-    --logging_steps 10 \
-    --output_dir ${OUTPUT_DIR} \
-    --num_train_epochs 1 \
-    --max_length 1024 \
+    --logging_steps 10   \
+    --output_dir $OUTPUT_DIR  \
+    --num_train_epochs 1  \
+    --max_length 1024   \
     --max_prompt_length 512 \
-    --seed 42 \
+    --seed 42  \
     --overwrite_output_dir \
     --report_to none
+
 ```
