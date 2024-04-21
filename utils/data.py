@@ -74,7 +74,7 @@ def apply_chat_template(
 
 def get_datasets() -> Dataset:
 
-    with open("/TO/LOAD/DATASET/UltraFeedback_triple_preferences.json") as infile:
+    with open("data/UltraFeedback_triple_preferences.json") as infile:
         dataset = json.load(infile)
     dataset = Dataset.from_dict(dataset)
     # print(dataset)
