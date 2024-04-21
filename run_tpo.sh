@@ -14,13 +14,14 @@ accelerate launch \
     --alpha 0.5  \
     --do_train  \
     --bf16   \
+    --attn_implementation flash_attention_2 \
     --multi_gpu_one_model True  \
     --learning_rate 5.0e-7 \
     --gradient_accumulation_steps 2  \
     --lr_scheduler_type cosine  \
     --optim adamw_torch  \
     --warmup_ratio 0.1   \
-    --save_steps 100  \
+    --save_steps 10  \
     --log_level info   \
     --per_device_train_batch_size 1 \
     --per_device_eval_batch_size 1  \
@@ -35,4 +36,3 @@ accelerate launch \
     --seed 42  \
     --overwrite_output_dir \
     --report_to none
-    

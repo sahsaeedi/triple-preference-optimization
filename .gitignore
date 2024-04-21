@@ -1,0 +1,31 @@
+# Ignore all log files
+*.log
+
+# Ignore node_modules directory in Node.js projects
+node_modules/
+
+# Ignore the build directory
+build/
+
+# Ignore temp files, often found on Windows
+*.tmp
+
+# Ignore all files with a `.bak` extension
+*.bak
+
+# Ignore environment files
+.env
+
+# Ignore MacOS system files
+.DS_Store
+
+# Ignore Python compiled files
+*/__pycache__/
+*.pyc
+
+# Ignore specific directories
+/path/to/directory/
+
+# Exclude specific files
+/path/to/your/file.txt
+

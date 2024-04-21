@@ -83,6 +83,15 @@ class ModelArguments:
             "choices": ["auto", "bfloat16", "float16", "float32"],
         },
     )
+    attn_implementation: Optional[str] = field(
+        default=None,
+        metadata={
+            "help": (
+                "Override the default `attn_implementation` and use flash attention."
+            ),
+            "choices": ["flash_attention_2"],
+        },
+    )
     trust_remote_code: bool = field(default=False, metadata={"help": "Trust remote code when loading a model."})
     use_flash_attention_2: bool = field(
         default=False,
