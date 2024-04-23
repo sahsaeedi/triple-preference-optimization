@@ -105,6 +105,22 @@ class ModelArguments:
         default=False,
         metadata={"help": ("Whether to use PEFT or not for training.")},
     )
+    peft_model_id: str = field(
+        default="",
+        metadata={
+            "help": (
+                "PEFT model location"
+            )
+        },
+    )
+    lora_rank: int = field(
+        default=16,
+        metadata={
+            "help": (
+                "The rank for LoRA"
+            )
+        },
+    )
     lora_r: Optional[int] = field(
         default=16,
         metadata={"help": ("LoRA R value.")},

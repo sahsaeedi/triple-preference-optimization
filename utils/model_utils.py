@@ -25,9 +25,11 @@ from huggingface_hub import list_repo_files
 from huggingface_hub.utils._errors import RepositoryNotFoundError
 from huggingface_hub.utils._validators import HFValidationError
 from peft import LoraConfig, PeftConfig
+from peft import LoraConfig, get_peft_model, prepare_model_for_int8_training, TaskType
 
 from .configs import DataArguments, TPOConfig, ModelArguments, SFTConfig
 from .data import DEFAULT_CHAT_TEMPLATE
+from peft import PeftModel, PeftConfig
 
 
 def get_current_device() -> int:
@@ -114,6 +116,22 @@ def is_adapter_model(model_name_or_path: str, revision: str = "main") -> bool:
 #         last_checkpoint = get_last_checkpoint(training_args.output_dir)
 #     return last_checkpoint
 
+
+def print_trainable_parameters(model):
+    """
+    Prints the number of trainable parameters in the model.
+    """
+    trainable_params = 0
+    all_param = 0
+    for _, param in model.named_parameters():
+        all_param += param.numel()
+        if param.requires_grad:
+            trainable_params += param.numel()
+    print(
+        f"trainable params: {trainable_params} || all params: {all_param} || trainable%: {100 * trainable_params / all_param}"
+    )
+
+
 def load_model(data_args, model_args, training_args, tokenizer, logger):
     # Detecting last checkpoint.
     # last_checkpoint = None
@@ -182,25 +200,6 @@ def load_model(data_args, model_args, training_args, tokenizer, logger):
     # if len(tokenizer) > embedding_size:
     #     model.resize_token_embeddings(len(tokenizer))
 
-    # if model_args.use_peft:
-    #     if model_args.peft_model_id:
-    #         model = PeftModel.from_pretrained(model, model_args.peft_model_id)
-    #         ## If still need to fine-tune
-    #         for name, param in model.named_parameters():
-    #             if "lora_A" in name or "lora_B" in name:
-    #                 param.requires_grad = True
-    #     else:
-    #         config = LoraConfig(
-    #             r=model_args.lora_rank,
-    #             lora_alpha=model_args.lora_rank * 2,
-    #             target_modules=["down_proj"],
-    #             lora_dropout=0.05,
-    #             bias="none",
-    #             task_type="CAUSAL_LM"
-    #         )
-    #         model = get_peft_model(model, config)
-    #     print_trainable_parameters(model)
-
     # if "llama" in model_args.model_name_or_path:
     #     model.config.pad_token_id = 0
     #     model.config.bos_token_id = 1
@@ -230,4 +229,24 @@ def load_model(data_args, model_args, training_args, tokenizer, logger):
                                                   torch_dtype=torch.float32, 
                                                  )
     model.config.use_cache = False
+
+    if model_args.use_peft:
+        if model_args.peft_model_id:
+            model = PeftModel.from_pretrained(model, model_args.peft_model_id)
+            ## If still need to fine-tune
+            for name, param in model.named_parameters():
+                if "lora_A" in name or "lora_B" in name:
+                    param.requires_grad = True
+        else:
+            config = LoraConfig(
+                r=model_args.lora_rank,
+                lora_alpha=model_args.lora_rank * 2,
+                target_modules=["down_proj"], # model specific, doesn't work with microsoft/phi-2, for microsoft/phi-2 use ["q_proj", "k_proj", "v_proj", "dense"]
+                # target_modules=["q_proj", "k_proj", "v_proj", "dense"],
+                lora_dropout=0.05,
+                bias="none",
+                task_type="CAUSAL_LM"
+            )
+            model = get_peft_model(model, config)
+        print_trainable_parameters(model)
     return model

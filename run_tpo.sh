@@ -35,4 +35,5 @@ accelerate launch \
     --max_prompt_length 512 \
     --seed 42  \
     --overwrite_output_dir \
-    --report_to none
+    --report_to none \
+    --use_peft

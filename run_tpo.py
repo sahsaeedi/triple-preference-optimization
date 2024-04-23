@@ -17,6 +17,7 @@ from datasets import load_from_disk
 from utils.configs import DataArguments, ModelArguments, TPOConfig
 from utils.model_utils import load_model, get_tokenizer
 from utils.data import load_dataset, apply_chat_template, get_datasets
+from utils.utils import SavePeftModelCallback
 
 logger = logging.getLogger(__name__)
 
