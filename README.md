@@ -20,9 +20,27 @@
 
  **TPO** (**T**riple **P**reference **O**ptimization) is a new preference learning method designed to align an LLM with three preferences without requiring a separate supervised fine-tuning step. The simple one-step combination of SFT and Preference Optimization outperforms current state-of-the-art alignment methods such as DPO, CPO, KTO and IPO.
 
-# Setup and Training 🚀
+<p align="center">
+    <img alt="TPO" src="demonstrations2.png" width="1000" height="">
+</p>
 
-## Environment and TPO Setup 🔧
+## Contents 📄
+
+- [Environment Setup](#environment-setup-)
+- [Training with TPO](#training-with-tpo-)
+
+## Supports ⭐
+
+- **Models**: Compatible with various models including but not limited to `alignment-handbook/zephyr-7b-sft-full` and `mistralai/Mistral-7B-v0.1`.
+- **GPUs**: Optimized for both Nvidia GPUs.
+- **Batch Sizes**: Configurable batch sizes for training to optimize GPU usage.
+- **Data Parallelism**: Support for data parallelism to speed up training on multiple GPUs.
+<!-- - **Advanced Schedulers and Optimizers**: Includes support for cosine learning rate scheduling and AdamW optimization.
+- **Precision Training**: Provides both mixed precision (bf16) and full precision training modes. -->
+
+<!-- # Setup and Training 🚀 -->
+
+## Environment Setup 🔧
 This is a quick tutorial to set up and train a model with the TPO method.
 
 1. **Create and activate a Conda environment**:
@@ -44,6 +62,7 @@ pip install -r requirements.txt
 ```bash
 python dataset.py
 ```
+
 
 ## Training with TPO 🔥
 Run  `run_tpo.sh` to train a model with TPO. This study used `alignment-handbook/zephyr-7b-sft-full` and `mistralai/Mistral-7B-v0.1` models. However, you can use other models to train with TPO.
@@ -85,3 +104,4 @@ accelerate launch \
     --report_to none
 
 ```
+
