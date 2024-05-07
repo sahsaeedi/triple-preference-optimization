@@ -32,7 +32,7 @@ conda activate tpo
 ```
 2. **Install PyTorch with CUDA support (for Nvidia GPUs)**:
 ```bash
-pip install torch==1.13.1+cu117 torchvision==0.14.1+cu117 torchaudio==0.13.1 --extra-index-url https://download.pytorch.org/whl/cu117
+pip install torch==2.1.2 torchvision==0.16.2 torchaudio==2.1.2 --index-url https://download.pytorch.org/whl/cu121
 ```
 3. **Install additional requirements**:
 ```bash
