@@ -69,9 +69,7 @@ We also assessed all alignment methods using
 Open LLM Leaderboard benchmarks (
 **ARC, HellaSwag, MMLU, TruthfulQA,** and **Winogrande**), 
  **Big Bench** benchmarks (
-Causal Judgment (causal reasoning), Sports Under-
-standing (commonsense reasoning), Formal Falla-
-cies) and OpenBookQA using <a href="https://github.com/EleutherAI/lm-evaluation-harness/tree/b281b0921b636bc36ad05c0b0b0763bd6dd43463">this version</a> of the Eleuther AI Harness.
+Causal Judgment (causal reasoning), Sports Understanding (commonsense reasoning), Formal Fallacies) and OpenBookQA using <a href="https://github.com/EleutherAI/lm-evaluation-harness/tree/b281b0921b636bc36ad05c0b0b0763bd6dd43463">this version</a> of the Eleuther AI Harness.
 ## Training with TPO 🔥
 Run  `run_tpo.sh` to train a model with TPO. This study used `alignment-handbook/zephyr-7b-sft-full`, `mistralai/Mistral-7B-v0.1` and `microsoft/phi-2` models. However, you can use other models to train with TPO.
 ```bash
