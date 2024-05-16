@@ -1,5 +1,5 @@
 <p align="center">
-    <img alt="TPO_LOGO.jpg" src="TPO_LOGO.jpg" width="1000" height="">
+    <img alt="TPO_LOGO.jpg" src="img/TPO_LOGO.jpg" width="1000" height="">
 </p>
 
 <div align="center">
@@ -23,7 +23,7 @@
 
 
 <p align="center">
-    <img alt="TPO" src="demonstrations2.png" width="1000" height="">
+    <img alt="TPO" src="img/demonstrations2.png" width="1000" height="">
 </p>
 
 ## Contents 📄
