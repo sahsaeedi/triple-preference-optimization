@@ -11,12 +11,8 @@
 <a href="LICENSE" alt="MIT License"><img src="https://img.shields.io/badge/license-MIT-FAD689.svg" /></a>
 <a href="" alt="TPO paper"><img src="https://img.shields.io/badge/TPO-Paper-D9AB42" /></a>
 <a href="https://www.asu.edu/" alt="jhu"><img src="https://img.shields.io/badge/Arizona_State_University-BEC23F" /></a>
- <a href="https://twitter.com/sahsaeedi">
-  <img src="https://img.shields.io/twitter/follow/sahsaeedi
-?style=social&logo=twitter"      alt="follow on Twitter"></a>
- <a href="https://twitter.com/ver_shivanshu">
-  <img src="https://img.shields.io/twitter/follow/ver_shivanshu
-?style=social&logo=twitter"      alt="follow on Twitter"></a>
+<a href="https://twitter.com/sahsaeedi"><img src="https://img.shields.io/twitter/follow/sahsaeedi?style=social&logo=twitter" alt="follow on Twitter"></a>
+<a href="https://twitter.com/ver_shivanshu"><img src="https://img.shields.io/twitter/follow/ver_shivanshu?style=social&logo=twitter" alt="follow on Twitter"></a>
 
  **TPO** (**T**riple **P**reference **O**ptimization) is a new preference learning method designed to align an LLM with three preferences without requiring a separate supervised fine-tuning step. The simple one-step combination of SFT and Preference Optimization outperforms current state-of-the-art alignment methods such as DPO, CPO, KTO, IPO and ORPO.
 
