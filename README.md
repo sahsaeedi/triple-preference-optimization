@@ -1,5 +1,5 @@
 <p align="center">
-    <img alt="TPO_LOGO.jpg" src="TPO_LOGO.jpg" width="1000" height="">
+    <img alt="TPO_LOGO.jpg" src="img/TPO_LOGO.jpg" width="1000" height="">
 </p>
 
 <div align="center">
@@ -11,19 +11,15 @@
 <a href="LICENSE" alt="MIT License"><img src="https://img.shields.io/badge/license-MIT-FAD689.svg" /></a>
 <a href="" alt="TPO paper"><img src="https://img.shields.io/badge/TPO-Paper-D9AB42" /></a>
 <a href="https://www.asu.edu/" alt="jhu"><img src="https://img.shields.io/badge/Arizona_State_University-BEC23F" /></a>
- <a href="https://twitter.com/sahsaeedi">
-  <img src="https://img.shields.io/twitter/follow/sahsaeedi
-?style=social&logo=twitter"      alt="follow on Twitter"></a>
- <a href="https://twitter.com/ver_shivanshu">
-  <img src="https://img.shields.io/twitter/follow/ver_shivanshu
-?style=social&logo=twitter"      alt="follow on Twitter"></a>
+<a href="https://twitter.com/sahsaeedi"><img src="https://img.shields.io/twitter/follow/sahsaeedi?style=social&logo=twitter" alt="follow on Twitter"></a>
+<a href="https://twitter.com/ver_shivanshu"><img src="https://img.shields.io/twitter/follow/ver_shivanshu?style=social&logo=twitter" alt="follow on Twitter"></a>
 
  **TPO** (**T**riple **P**reference **O**ptimization) is a new preference learning method designed to align an LLM with three preferences without requiring a separate supervised fine-tuning step. The simple one-step combination of SFT and Preference Optimization outperforms current state-of-the-art alignment methods such as DPO, CPO, KTO, IPO and ORPO.
 
 
 
 <p align="center">
-    <img alt="TPO" src="demonstrations2.png" width="1000" height="">
+    <img alt="TPO" src="img/demonstrations2.png" width="1000" height="">
 </p>
 
 ## Contents 📄
@@ -73,9 +69,7 @@ We also assessed all alignment methods using
 Open LLM Leaderboard benchmarks (
 **ARC, HellaSwag, MMLU, TruthfulQA,** and **Winogrande**), 
  **Big Bench** benchmarks (
-Causal Judgment (causal reasoning), Sports Under-
-standing (commonsense reasoning), Formal Falla-
-cies) and OpenBookQA using <a href="https://github.com/EleutherAI/lm-evaluation-harness/tree/b281b0921b636bc36ad05c0b0b0763bd6dd43463">this version</a> of the Eleuther AI Harness.
+Causal Judgment (causal reasoning), Sports Understanding (commonsense reasoning), Formal Fallacies) and OpenBookQA using <a href="https://github.com/EleutherAI/lm-evaluation-harness/tree/b281b0921b636bc36ad05c0b0b0763bd6dd43463">this version</a> of the Eleuther AI Harness.
 ## Training with TPO 🔥
 Run  `run_tpo.sh` to train a model with TPO. This study used `alignment-handbook/zephyr-7b-sft-full`, `mistralai/Mistral-7B-v0.1` and `microsoft/phi-2` models. However, you can use other models to train with TPO.
 ```bash
@@ -129,7 +123,7 @@ the reference response, the second-highest score as
 the chosen response, and the lowest score as the
 rejected response.
 
-Finally, the dataset includes <$y_{ref}$ $y_w$ $y_l$> where $y_{ref}$ represents reference response, $y_{w}$ represents chosen response and $y_l$ represents rejected response. 
+Finally, the dataset includes < $y_{ref}$, $y_w$, $y_l$ > where $y_{ref}$ represents reference response, $y_{w}$ represents chosen response and $y_l$ represents rejected response. 
 
 The Data Format in JSON file must be:
 ```
