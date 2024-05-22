@@ -123,7 +123,7 @@ the reference response, the second-highest score as
 the chosen response, and the lowest score as the
 rejected response.
 
-Finally, the dataset includes <$y_{ref}$ $y_w$ $y_l$> where $y_{ref}$ represents reference response, $y_{w}$ represents chosen response and $y_l$ represents rejected response. 
+Finally, the dataset includes < $y_{ref}$, $y_w$, $y_l$ > where $y_{ref}$ represents reference response, $y_{w}$ represents chosen response and $y_l$ represents rejected response. 
 
 The Data Format in JSON file must be:
 ```
