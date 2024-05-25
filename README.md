@@ -131,19 +131,19 @@ rejected response.
 Finally, the dataset includes < $y_{ref}$, $y_w$, $y_l$ > where $y_{ref}$ represents reference response, $y_{w}$ represents chosen response and $y_l$ represents rejected response. 
 
 The Data Format in JSON file must be:
-```
+```JSON
 {
-    "prompt": PROMPT_SENTENCE,
-    "reference": REFERENCE_SENTENCE,
-    "chosen": CHOSEN_SENTENCE,
-    "rejected": REJECTED_SENTENCE,
+    "prompt": "PROMPT_SENTENCE",
+    "reference": "REFERENCE_SENTENCE",
+    "chosen": "CHOSEN_SENTENCE",
+    "rejected": "REJECTED_SENTENCE",
 }
 ``` 
 
 ## BibTeX 📖
 
 For more insights about various alignment methods, please check <a href="https://arxiv.org/abs/2404.14723"> paper</a>.
-```
+```bibtex
 @misc{saeidi2024insights,
       title={Insights into Alignment: Evaluating DPO and its Variants Across Multiple Tasks}, 
       author={Amir Saeidi and Shivanshu Verma and Chitta Baral},
