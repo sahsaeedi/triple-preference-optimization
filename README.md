@@ -141,6 +141,16 @@ The Data Format in JSON file must be:
 ``` 
 
 ## BibTeX 📖
+```bibtex
+@misc{saeidi2024triple,
+      title={Triple Preference Optimization: Achieving Better Alignment with Less Data in a Single Step Optimization}, 
+      author={Amir Saeidi and Shivanshu Verma and Aswin RRV and Chitta Baral},
+      year={2024},
+      eprint={2405.16681},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}
+```
 
 For more insights about various alignment methods, please check <a href="https://arxiv.org/abs/2404.14723"> paper</a>.
 ```bibtex
